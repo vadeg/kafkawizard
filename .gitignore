@@ -1,0 +1,5 @@
+build
+.idea
+.gradle
+gradle-wrapper.jar
+.DS_Store
