@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 import static java.util.Map.entry;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-public class MetricNameBuilderTest {
+public final class MetricNameBuilderTest {
 
     static Stream<Arguments> generateMetricNames() {
         Metrics metrics = new Metrics();
@@ -43,7 +43,7 @@ public class MetricNameBuilderTest {
     }
 
     @SafeVarargs
-    private static Map<String, String> orderedTags(Entry<String, String>... entries) {
+    private static Map<String, String> orderedTags(final Entry<String, String>... entries) {
         Map<String, String> map = new LinkedHashMap<>();
         Arrays.stream(entries).forEach(entry -> map.put(entry.getKey(), entry.getValue()));
         return map;
@@ -51,7 +51,7 @@ public class MetricNameBuilderTest {
 
     @ParameterizedTest
     @MethodSource("generateMetricNames")
-    void createMetricName(MetricName metricName, String expected) {
+    void createMetricName(final MetricName metricName, final String expected) {
         Assertions.assertEquals(expected, MetricNameBuilder.build(metricName));
     }
 

@@ -1,6 +1,8 @@
 plugins {
     java
     checkstyle
+    `maven-publish`
+    signing
 }
 
 group = "com.github.vadeg"
@@ -24,4 +26,45 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("kafkaLib") {
+            from(components["java"])
+            pom {
+                description.set("Library to publish metrics from Kafka producer or consumer using Dropwizard metrics.")
+                url.set("https://github.com/vadeg/kafkawizard-metrics")
+                licenses {
+                    license{
+                        name.set("MIT License")
+                        url.set("https://opensource.org/licenses/MIT")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("vadeg")
+                        name.set("Vadim")
+                        email.set("5587834+vadeg@users.noreply.github.com")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/vadeg/kafkawizard-metrics.git")
+                    developerConnection.set("scm:git:ssh://github.com:vadeg/kafkawizard-metrics.git")
+                    url.set("http://github.com/vadeg/kafkawizard-metrics/tree/master")
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "LocalRepo"
+            url = uri("file://$buildDir/repo")
+        }
+    }
+}
+
+signing {
+    sign(publishing.publications["kafkaLib"])
 }

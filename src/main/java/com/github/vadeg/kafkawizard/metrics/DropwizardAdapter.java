@@ -9,30 +9,31 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 import static com.github.vadeg.kafkawizard.metrics.DropwizardAdapterConfig.METRIC_REGISTRY_NAME_CONFIG;
 
-public class DropwizardAdapter implements MetricsReporter {
+public final class DropwizardAdapter implements MetricsReporter {
 
     private static final Logger LOG = LoggerFactory.getLogger(DropwizardAdapter.class);
     private MetricRegistry metricRegistry;
-    private final Set<String> registeredMetrics = new ConcurrentSkipListSet<>();
 
     @Override
-    public void init(List<KafkaMetric> metrics) {
-        metrics.forEach(m -> System.out.println("Init metric: " + m.metricName()));
+    public void init(final List<KafkaMetric> metrics) {
+        metrics.forEach(this::metricChange);
     }
 
     @Override
-    public void metricChange(KafkaMetric metric) {
-        System.out.println("Metric change: " + metric.metricName());
+    public void metricChange(final KafkaMetric metric) {
+        final String name = MetricNameBuilder.build(metric.metricName());
+        metricRegistry.gauge(name, () -> metric::metricValue);
+        LOG.debug("Metric {} registered", name);
     }
 
     @Override
-    public void metricRemoval(KafkaMetric metric) {
-        System.out.println("Metric remove: " + metric.metricName());
+    public void metricRemoval(final KafkaMetric metric) {
+        final String name = MetricNameBuilder.build(metric.metricName());
+        metricRegistry.remove(name);
+        LOG.debug("Metric {} unregistered", name);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class DropwizardAdapter implements MetricsReporter {
     }
 
     @Override
-    public void configure(Map<String, ?> configs) {
+    public void configure(final Map<String, ?> configs) {
         Map<String, Object> properties = DropwizardAdapterConfig.CONFIG.parse(configs);
         String registryName = (String) properties.get(METRIC_REGISTRY_NAME_CONFIG);
         if (registryName == null) {
@@ -51,10 +52,5 @@ public class DropwizardAdapter implements MetricsReporter {
             metricRegistry = SharedMetricRegistries.getOrCreate(registryName);
             LOG.info("Using \"{}\" metric registry", registryName);
         }
-
-
-/*        configs.forEach((k, v) -> {
-            System.out.println(k + ": " + v);
-        });*/
     }
 }
