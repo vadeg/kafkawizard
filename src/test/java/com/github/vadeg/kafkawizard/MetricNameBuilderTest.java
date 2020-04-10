@@ -1,5 +1,6 @@
-package com.github.vadeg.kafkawizard.metrics;
+package com.github.vadeg.kafkawizard;
 
+import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.common.MetricName;
 import org.apache.kafka.common.metrics.Metrics;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +28,7 @@ public final class MetricNameBuilderTest {
                         metrics.metricName(
                                 "metric-1",
                                 "group-1",
-                                orderedTags(entry("key-1", "tag-1"))
+                                Map.ofEntries(entry("key-1", "tag-1"))
                         ),
                         "group-1.tag-1.metric-1"
                 ),
@@ -35,7 +36,8 @@ public final class MetricNameBuilderTest {
                         metrics.metricName(
                                 "metric-1",
                                 "group-1",
-                                orderedTags(entry("key-1", "tag-1"), entry("key-2", "tag-2"))
+                                Map.ofEntries(entry(CommonClientConfigs.CLIENT_ID_CONFIG, "tag-1"),
+                                              entry("key-2", "tag-2"))
                         ),
                         "group-1.tag-1.tag-2.metric-1"
                 )
@@ -51,12 +53,20 @@ public final class MetricNameBuilderTest {
 
     @ParameterizedTest
     @MethodSource("generateMetricNames")
-    void createMetricName(final MetricName metricName, final String expected) {
-        Assertions.assertEquals(expected, MetricNameBuilder.build(metricName));
+    void createMetricNameWithoutPrefix(final MetricName metricName, final String expected) {
+        Assertions.assertEquals(expected, MetricNameBuilder.noPrefix().build(metricName));
+    }
+
+    @Test
+    void createMetricNameWith() {
+        MetricNameBuilder nameBuilder = MetricNameBuilder.withPrefix("prefix");
+        Metrics metrics = new Metrics();
+        MetricName metricName = metrics.metricName("metric-1", "group-1");
+        Assertions.assertEquals("prefix.group-1.metric-1", nameBuilder.build(metricName));
     }
 
     @Test
     void passNullInBuilder() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> MetricNameBuilder.build(null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> MetricNameBuilder.noPrefix().build(null));
     }
 }

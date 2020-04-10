@@ -1,2 +1,2 @@
-rootProject.name = "kafkawizard-metrics"
+rootProject.name = "kafkawizard"
 
