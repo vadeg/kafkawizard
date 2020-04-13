@@ -30,9 +30,6 @@ tasks.test {
 }
 
 publishing {
-    val mavenCentralUser: String by project
-    val mavenCentralPassword: String by project
-
     publications {
         create<MavenPublication>("kafkaLib") {
             from(components["java"])
@@ -71,8 +68,8 @@ publishing {
             name = "CentralSnapshot"
             url = uri("https://oss.sonatype.org/content/repositories/snapshots")
             credentials {
-                username = mavenCentralUser
-                password = mavenCentralPassword
+                username = System.getenv("OSS_USER")
+                password = System.getenv("OSS_PASSWORD")
             }
             mavenContent {
                 snapshotsOnly()
@@ -82,8 +79,8 @@ publishing {
             name = "CentralRelease"
             url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
             credentials {
-                username = mavenCentralUser
-                password = mavenCentralPassword
+                username = System.getenv("OSS_USER")
+                password = System.getenv("OSS_PASSWORD")
             }
             mavenContent {
                 releasesOnly()
