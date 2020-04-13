@@ -29,6 +29,9 @@ tasks.test {
 }
 
 publishing {
+    val mavenCentralUser: String by project
+    val mavenCentralPassword: String by project
+
     publications {
         create<MavenPublication>("kafkaLib") {
             from(components["java"])
@@ -36,7 +39,7 @@ publishing {
                 description.set("Library to publish metrics from Kafka producer or consumer using Dropwizard metrics.")
                 url.set("https://github.com/vadeg/kafkawizard-metrics")
                 licenses {
-                    license{
+                    license {
                         name.set("MIT License")
                         url.set("https://opensource.org/licenses/MIT")
                     }
@@ -61,6 +64,28 @@ publishing {
         maven {
             name = "LocalRepo"
             url = uri("file://$buildDir/repo")
+        }
+        mavenCentral {
+            name = "CentralSnapshot"
+            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+            credentials {
+                username = mavenCentralUser
+                password = mavenCentralPassword
+            }
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
+        mavenCentral {
+            name = "CentralRelease"
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            credentials {
+                username = mavenCentralUser
+                password = mavenCentralPassword
+            }
+            mavenContent {
+                releasesOnly()
+            }
         }
     }
 }
