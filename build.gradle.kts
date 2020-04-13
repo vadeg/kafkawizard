@@ -3,10 +3,10 @@ plugins {
     checkstyle
     `maven-publish`
     signing
+    id("net.researchgate.release") version "2.8.1"
 }
 
 group = "com.github.vadeg"
-version = "0.0.1-SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -92,4 +92,9 @@ publishing {
 
 signing {
     sign(publishing.publications["kafkaLib"])
+}
+
+release {
+    tagTemplate = "v${version}"
+    versionPropertyFile = "gradle.properties"
 }
