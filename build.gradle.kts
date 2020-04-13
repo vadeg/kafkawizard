@@ -9,6 +9,8 @@ group = "com.github.vadeg"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
+    withJavadocJar()
+    withSourcesJar()
 }
 
 repositories {
@@ -37,6 +39,7 @@ publishing {
             pom {
                 description.set("Library to publish metrics from Kafka producer or consumer using Dropwizard metrics.")
                 url.set("https://github.com/vadeg/kafkawizard-metrics")
+                name.set("Kafka client integration with Dropwizard")
                 licenses {
                     license {
                         name.set("MIT License")
