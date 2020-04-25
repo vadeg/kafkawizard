@@ -1,4 +1,5 @@
 ![Build & Test](https://github.com/vadeg/kafkawizard-metrics/workflows/Build%20&%20Test/badge.svg?branch=master)
+![Maven Central](https://img.shields.io/maven-central/v/com.github.vadeg/kafkawizard)
 
 # Kafka clients metrics collector
 
@@ -12,7 +13,32 @@ A tool which collects producer and consumer Kafka metrics and expose them using 
 
 # Installation
 
-TBA
+Check latest version in [Maven Central](https://search.maven.org/search?q=g:com.github.vadeg%20AND%20a:kafkawizard). 
+
+## Maven
+```xml
+<dependency>
+  <groupId>com.github.vadeg</groupId>
+  <artifactId>kafkawizard</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
+
+## Gradle 
+### Groovy DSL
+```
+implementation 'com.github.vadeg:kafkawizard:0.0.1'
+```
+
+### Kotlin DSL
+```
+implementation("com.github.vadeg:kafkawizard:0.0.1")
+```
+
+## Scala
+```sbt
+libraryDependencies += "com.github.vadeg" % "kafkawizard" % "0.0.1"
+```
 
 # Usage
 
