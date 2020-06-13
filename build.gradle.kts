@@ -18,8 +18,8 @@ repositories {
 }
 
 dependencies {
-    implementation("org.apache.kafka:kafka_2.12:2.3.0")
-    implementation("io.dropwizard.metrics:metrics-core:4.1.0")
+    implementation("org.apache.kafka:kafka-clients:2.+")
+    implementation("io.dropwizard.metrics:metrics-core:4.1.+")
     testImplementation("org.junit.jupiter:junit-jupiter:5.6.0")
     testImplementation("org.apache.logging.log4j:log4j-slf4j-impl:2.13.1")
     testImplementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.2")
